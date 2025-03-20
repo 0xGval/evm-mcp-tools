@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+      "ethereum-tools": {
+          "command": "node",
+          "args": [
+              "./main.js"
+          ],
+          "env": {
+              "ETH_RPC_URL": "your_ethereum_rpc_url_here",
+              "MORALIS_API_KEY": "your_moralis_api_key_here",
+              "ETHERSCAN_API_KEY": "your_etherscan_api_key_here"
+          }
+      }
+  }
+} 
