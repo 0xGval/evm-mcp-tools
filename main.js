@@ -25,6 +25,7 @@ import { registerBalanceTools } from "./tools/balance.js";
 import { registerTokenTools } from "./tools/tokens.js";
 import { registerProfitabilityTools } from "./tools/profitability.js";
 import { registerUtilityTools } from "./tools/utility.js";
+import { registerTokenAnalysisTools } from "./tools/token-analysis.js";
 
 // Add global error handling to prevent crashes
 process.on('uncaughtException', (err) => {
@@ -59,6 +60,7 @@ registerBalanceTools(server, web3);
 registerTokenTools(server);
 registerProfitabilityTools(server);
 registerAuditTool(server);
+registerTokenAnalysisTools(server);
 
 // Start receiving messages on stdin and sending messages on stdout
 const transport = new StdioServerTransport();
