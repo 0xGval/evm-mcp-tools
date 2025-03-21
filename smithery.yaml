@@ -1,0 +1,43 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - ethRpcUrl
+      - moralisApiKey
+      - etherscanApiKey
+      - codexApiKey
+    properties:
+      ethRpcUrl:
+        type: string
+        description: Ethereum RPC URL
+      moralisApiKey:
+        type: string
+        description: Moralis API Key
+      etherscanApiKey:
+        type: string
+        description: Etherscan API Key
+      codexApiKey:
+        type: string
+        description: Codex API Key
+  commandFunction:
+    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    |-
+    (config) => ({
+      command: 'node',
+      args: ['main.js'],
+      env: {
+        ETH_RPC_URL: config.ethRpcUrl,
+        MORALIS_API_KEY: config.moralisApiKey,
+        ETHERSCAN_API_KEY: config.etherscanApiKey,
+        CODEX_API_KEY: config.codexApiKey
+      }
+    })
+  exampleConfig:
+    ethRpcUrl: https://eth.llamarpc.com
+    moralisApiKey: your_moralis_api_key
+    etherscanApiKey: your_etherscan_api_key
+    codexApiKey: your_codex_api_key
