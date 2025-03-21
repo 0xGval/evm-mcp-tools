@@ -8,6 +8,7 @@ A comprehensive toolkit for Ethereum blockchain analysis directly within Claude 
 - **Wallet Analysis**: Check ETH balances, token holdings, and transaction history
 - **Profitability Tracking**: Calculate wallet profit/loss across tokens and trades
 - **Blockchain Data**: Fetch and analyze on-chain data with simple commands
+- **Token Analysis**: Get comprehensive token details, price history, and trading patterns
 
 ## Installation
 
@@ -17,6 +18,7 @@ A comprehensive toolkit for Ethereum blockchain analysis directly within Claude 
 - Free API keys:
   - [Etherscan](https://etherscan.io/apis) - For contract verification and analysis
   - [Moralis](https://moralis.io/) - For wallet profitability and token balances
+  - [Codex](https://codex.io/) - For token price history and advanced analytics
   - (Optional) RPC provider like [Infura](https://infura.io/) or use free public endpoints
 
 ### Setup Steps
@@ -45,7 +47,8 @@ A comprehensive toolkit for Ethereum blockchain analysis directly within Claude 
          "env": {
            "ETH_RPC_URL": "https://eth.llamarpc.com",
            "MORALIS_API_KEY": "your_moralis_api_key",
-           "ETHERSCAN_API_KEY": "your_etherscan_api_key"
+           "ETHERSCAN_API_KEY": "your_etherscan_api_key",
+           "CODEX_API_KEY": "your_codex_api_key"
          }
        }
      }
@@ -69,6 +72,11 @@ A comprehensive toolkit for Ethereum blockchain analysis directly within Claude 
 ### Profitability
 - `getWalletPnl(address: "0x...", chain: "eth")`: Analyze wallet profit/loss
 
+### Token Analysis
+- `getTokenInfo(address: "0x...", networkId: 1)`: Get basic token information including name, symbol, and supply
+- `getTokenPriceHistory(address: "0x...", networkId: 1, days: 7, resolution: "1D")`: Get historical price data
+- `analyzeToken(address: "0x...", networkId: 1, days: 30)`: Perform comprehensive token analysis including volatility and trading patterns
+
 ### Utilities
 - `add(a: 1, b: 2)`: Simple utility function example
 
@@ -78,6 +86,7 @@ Common issues:
 - **Environment variables not found**: Make sure your API keys are correctly set in `mcp.json`
 - **Provider errors**: Check that your ETH_RPC_URL is valid and accessible
 - **Path errors**: Ensure you're using full absolute paths with proper escaping in Windows (`\\`)
+- **Codex API issues**: Verify your Codex API key is valid and has permission to access token data
 
 ## Development
 
@@ -96,4 +105,5 @@ This project is licensed under the MIT License.
 - [Web3.js](https://web3js.org/)
 - [Moralis](https://moralis.io/)
 - [Etherscan](https://etherscan.io/)
+- [Codex](https://codex.io/)
 
