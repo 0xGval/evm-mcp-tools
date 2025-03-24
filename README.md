@@ -9,6 +9,7 @@ A comprehensive toolkit for Ethereum blockchain analysis directly within Claude 
 - **Profitability Tracking**: Calculate wallet profit/loss across tokens and trades
 - **Blockchain Data**: Fetch and analyze on-chain data with simple commands
 - **Token Analysis**: Get comprehensive token details, price history, and trading patterns
+- **Twitter Search**: Find tweets by keywords, usernames, or complex search criteria
 
 ## Installation
 
@@ -19,13 +20,14 @@ A comprehensive toolkit for Ethereum blockchain analysis directly within Claude 
   - [Etherscan](https://etherscan.io/apis) - For contract verification and analysis
   - [Moralis](https://moralis.io/) - For wallet profitability and token balances
   - [Codex](https://codex.io/) - For token price history and advanced analytics
+  - [RapidAPI](https://rapidapi.com/omarmhaimdat/api/twitter154) - For Twitter search functionality
   - (Optional) RPC provider like [Infura](https://infura.io/) or use free public endpoints
 
 ### Setup Steps
 
 1. Clone this repository:
    ```
-   git clone https://github.com/giovannialbero1992/ethereum-tools-mcp
+   git clone https://github.com/0xGval/evm-tools-mcp
    cd ethereum-tools-mcp
    ```
 
@@ -48,7 +50,8 @@ A comprehensive toolkit for Ethereum blockchain analysis directly within Claude 
            "ETH_RPC_URL": "https://eth.llamarpc.com",
            "MORALIS_API_KEY": "your_moralis_api_key",
            "ETHERSCAN_API_KEY": "your_etherscan_api_key",
-           "CODEX_API_KEY": "your_codex_api_key"
+           "CODEX_API_KEY": "your_codex_api_key",
+           "RAPIDAPI_KEY": "your_rapidapi_key"
          }
        }
      }
@@ -77,6 +80,14 @@ A comprehensive toolkit for Ethereum blockchain analysis directly within Claude 
 - `getTokenPriceHistory(address: "0x...", networkId: 1, days: 7, resolution: "1D")`: Get historical price data
 - `analyzeToken(address: "0x...", networkId: 1, days: 30)`: Perform comprehensive token analysis including volatility and trading patterns
 
+### Twitter Search
+**Note**: The Twitter search functionality is extremely basic in its current implementation. It provides minimal parsing and formatting of results.
+
+- `getUserTweets(username: "username", limit: 10, section: "latest")`: Get tweets from a specific user
+- `searchTwitter(query: "ethereum", section: "top", limit: 5)`: General Twitter search with advanced query options
+  - Advanced queries supported like `(from:username)`, `(has:links)`, etc.
+  - Optional parameters: min_likes, min_retweets, min_replies, start_date, end_date, language
+
 ### Utilities
 - `add(a: 1, b: 2)`: Simple utility function example
 
@@ -87,6 +98,7 @@ Common issues:
 - **Provider errors**: Check that your ETH_RPC_URL is valid and accessible
 - **Path errors**: Ensure you're using full absolute paths with proper escaping in Windows (`\\`)
 - **Codex API issues**: Verify your Codex API key is valid and has permission to access token data
+- **Twitter search errors**: Make sure your RapidAPI key has access to the Twitter154 API
 
 ## Development
 
@@ -106,4 +118,5 @@ This project is licensed under the MIT License.
 - [Moralis](https://moralis.io/)
 - [Etherscan](https://etherscan.io/)
 - [Codex](https://codex.io/)
+- [RapidAPI Twitter154](https://rapidapi.com/omarmhaimdat/api/twitter154)
 

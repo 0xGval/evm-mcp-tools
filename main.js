@@ -26,6 +26,7 @@ import { registerTokenTools } from "./tools/tokens.js";
 import { registerProfitabilityTools } from "./tools/profitability.js";
 import { registerUtilityTools } from "./tools/utility.js";
 import { registerTokenAnalysisTools } from "./tools/token-analysis.js";
+import { registerTwitterTools } from "./tools/twitter.js";
 
 // Add global error handling to prevent crashes
 process.on('uncaughtException', (err) => {
@@ -61,6 +62,7 @@ registerTokenTools(server);
 registerProfitabilityTools(server);
 registerAuditTool(server);
 registerTokenAnalysisTools(server);
+registerTwitterTools(server);
 
 // Start receiving messages on stdin and sending messages on stdout
 const transport = new StdioServerTransport();
