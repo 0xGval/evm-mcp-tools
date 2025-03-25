@@ -1,4 +1,5 @@
 # Ethereum Tools for Claude MCP
+[![smithery badge](https://smithery.ai/badge/@0xGval/evm-mcp-tools)](https://smithery.ai/server/@0xGval/evm-mcp-tools)
 
 A comprehensive toolkit for Ethereum blockchain analysis directly within Claude AI using Model Context Protocol (MCP).
 
@@ -12,6 +13,14 @@ A comprehensive toolkit for Ethereum blockchain analysis directly within Claude 
 - **Twitter Search**: Find tweets by keywords, usernames, dates, or complex search criteria with natural language processing
 
 ## Installation
+
+### Installing via Smithery
+
+To install Ethereum Tools for Claude for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@0xGval/evm-mcp-tools):
+
+```bash
+npx -y @smithery/cli install @0xGval/evm-mcp-tools --client claude
+```
 
 ### Prerequisites
 - Node.js v16+
