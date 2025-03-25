@@ -46,7 +46,7 @@ export function registerTwitterTools(server) {
     return response.data.results || [];
   };
 
-  // Add Twitter search tool
+  // Add Twitter search tool with built-in guide consultation
   server.tool("searchTwitter",
     { 
       query: z.string().min(1, "Search query is required"),
@@ -61,24 +61,58 @@ export function registerTwitterTools(server) {
     },
     async ({ query, section, limit, min_retweets, min_likes, min_replies, start_date, end_date, language }) => {
       try {
-        // Format query if it's not already formatted with parentheses
-        // This helps with common user searches
-        if (query.startsWith('@') && !query.includes('(')) {
-          query = `(from:${query.substring(1)})`;
-        } else if (!query.includes('(') && !query.includes(':')) {
-          // This is a simple keyword search, no formatting needed
+        // ENHANCEMENT: Pre-analyze the query to determine if it needs formatting
+        let formattedQuery = query;
+        
+        // Determine if query appears to be in natural language vs. Twitter syntax
+        const isNaturalLanguageQuery = !query.includes('(') && 
+                                      !query.includes(':') && 
+                                      !query.includes('-') &&
+                                      !query.includes('"') &&
+                                      !query.startsWith('@');
+        
+        if (isNaturalLanguageQuery) {
+          // This appears to be a natural language query, try to extract intent
+          
+          // Check for user mentions that should be converted to from: syntax
+          if (query.toLowerCase().includes('from user') || query.toLowerCase().includes('by user')) {
+            const userMatch = query.match(/from user\s+(\w+)/i) || query.match(/by user\s+(\w+)/i) || 
+                            query.match(/from\s+@?(\w+)/i) || query.match(/by\s+@?(\w+)/i);
+            
+            if (userMatch && userMatch[1]) {
+              const username = userMatch[1];
+              // Remove the matched part from the query and add proper Twitter syntax
+              formattedQuery = query.replace(/from user\s+\w+/i, '')
+                                 .replace(/by user\s+\w+/i, '')
+                                 .replace(/from\s+@?\w+/i, '')
+                                 .replace(/by\s+@?\w+/i, '');
+              
+              // Add the proper Twitter syntax
+              formattedQuery = `(from:${username}) ${formattedQuery.trim()}`;
+            }
+          }
+        } else {
+          // Already has some Twitter syntax, just do simple formatting
+          
+          // Format query if it's not already formatted with parentheses
+          if (query.startsWith('@') && !query.includes('(')) {
+            formattedQuery = `(from:${query.substring(1)})`;
+          }
         }
         
-        // Use the shared search function
+        console.error(`Original query: "${query}"`);
+        console.error(`Formatted query: "${formattedQuery}"`);
+        
+        // Use the shared search function with the formatted query
         const tweets = await performTwitterSearch(
-          query, section, limit, min_retweets, min_likes, min_replies, start_date, end_date, language
+          formattedQuery, section, limit, min_retweets, min_likes, min_replies, start_date, end_date, language
         );
         
         // Format the response
         return {
           content: [{ 
             type: "text", 
-            text: formatTwitterResults(query, tweets, section)
+            text: formatTwitterResults(formattedQuery, tweets, section)
           }]
         };
       } catch (error) {
@@ -93,42 +127,58 @@ export function registerTwitterTools(server) {
     }
   );
   
-  // Add user tweets search tool - now uses the shared function directly
-  server.tool("getUserTweets",
+  // Add a Twitter syntax help tool
+  server.tool("twitterSearchHelp",
     { 
-      username: z.string().min(1, "Username is required"),
-      limit: z.number().int().positive().optional().default(10),
-      min_likes: z.number().int().optional(),
-      section: z.enum(["latest", "top"]).optional().default("latest")
+      topic: z.string().optional().default("general")
     },
-    async ({ username, limit, min_likes, section }) => {
-      try {
-        // Format username correctly (remove @ if present)
-        const formattedUsername = username.startsWith('@') ? username.substring(1) : username;
-        
-        // Format the query in the correct format for user tweets
-        const query = `(from:${formattedUsername})`;
-        
-        // Use the shared search function directly
-        const tweets = await performTwitterSearch(
-          query, section, limit, undefined, min_likes
-        );
-        
-        // Format the response
-        return {
-          content: [{ 
-            type: "text", 
-            text: formatTwitterResults(query, tweets, section)
-          }]
-        };
-      } catch (error) {
-        return {
-          content: [{ 
-            type: "text", 
-            text: `Error fetching tweets from ${username}: ${error.message}`
-          }]
-        };
-      }
+    async ({ topic }) => {
+      // Simplified guide content from our resource
+      const helpContent = {
+        general: `# Twitter Search Syntax Guide
+
+Basic operators:
+- Simple keyword: \`ethereum\` - Finds tweets containing this word
+- Exact phrase: \`"ethereum scaling"\` - Finds the exact phrase
+- OR operator: \`ethereum OR solana\` - Finds tweets with either term
+- Exclusion: \`ethereum -solana\` - Finds tweets with ethereum but not solana
+
+Account filters:
+- From user: \`(from:username)\` - Tweets sent by a specific account
+- To user: \`(to:username)\` - Replies to a specific account
+- Mentioning: \`(@username)\` - Tweets that mention this account
+
+Other filters:
+- Date range: \`since:2024-01-01 until:2024-01-31\`
+- Media: \`has:links\`, \`has:images\`, \`has:videos\`
+- Engagement: \`min_faves:100\`, \`min_retweets:50\`, \`min_replies:10\``,
+
+        user: `# User-Related Twitter Search Syntax
+
+- From specific user: \`(from:username)\` - Tweets sent by a specific account
+- To specific user: \`(to:username)\` - Replies to a specific account
+- Mentioning user: \`(@username)\` - Tweets that mention this account
+
+Examples:
+- \`(from:vitalikbuterin) ethereum\` - Tweets from Vitalik about Ethereum
+- \`(to:ethereum) help\` - Help requests sent to the Ethereum account`,
+
+        date: `# Date-Related Twitter Search Syntax
+
+- Since date: \`since:YYYY-MM-DD\` - Tweets after this date
+- Until date: \`until:YYYY-MM-DD\` - Tweets before this date
+
+Example:
+- \`ethereum since:2024-01-01 until:2024-01-31\` - Ethereum tweets from January 2024`
+      };
+
+      // Return the requested help topic or general help
+      return {
+        content: [{
+          type: "text",
+          text: helpContent[topic] || helpContent.general
+        }]
+      };
     }
   );
 }

@@ -9,7 +9,7 @@ A comprehensive toolkit for Ethereum blockchain analysis directly within Claude 
 - **Profitability Tracking**: Calculate wallet profit/loss across tokens and trades
 - **Blockchain Data**: Fetch and analyze on-chain data with simple commands
 - **Token Analysis**: Get comprehensive token details, price history, and trading patterns
-- **Twitter Search**: Find tweets by keywords, usernames, or complex search criteria
+- **Twitter Search**: Find tweets by keywords, usernames, dates, or complex search criteria with natural language processing
 
 ## Installation
 
@@ -81,12 +81,15 @@ A comprehensive toolkit for Ethereum blockchain analysis directly within Claude 
 - `analyzeToken(address: "0x...", networkId: 1, days: 30)`: Perform comprehensive token analysis including volatility and trading patterns
 
 ### Twitter Search
-**Note**: The Twitter search functionality is extremely basic in its current implementation. It provides minimal parsing and formatting of results.
-
-- `getUserTweets(username: "username", limit: 10, section: "latest")`: Get tweets from a specific user
-- `searchTwitter(query: "ethereum", section: "top", limit: 5)`: General Twitter search with advanced query options
-  - Advanced queries supported like `(from:username)`, `(has:links)`, etc.
+- `searchTwitter(query: "ethereum", section: "top", limit: 5)`: Intelligent Twitter search with natural language processing
+  - Automatically formats natural language queries into proper Twitter syntax
+  - Understands user queries like "Find tweets by _gval about hyperliquid"
+  - Supports advanced Twitter search operators: `from:username`, `has:links`, etc.
   - Optional parameters: min_likes, min_retweets, min_replies, start_date, end_date, language
+
+- `twitterSearchHelp(topic: "general")`: Get help with Twitter search syntax 
+  - Available topics: "general", "user", "date"
+  - Provides examples and explanations of Twitter search operators
 
 ### Utilities
 - `add(a: 1, b: 2)`: Simple utility function example
