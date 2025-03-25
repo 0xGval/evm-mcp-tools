@@ -28,7 +28,7 @@ A comprehensive toolkit for Ethereum blockchain analysis directly within Claude 
 1. Clone this repository:
    ```
    git clone https://github.com/0xGval/evm-tools-mcp
-   cd ethereum-tools-mcp
+   cd evm-tools-mcp
    ```
 
 2. Install dependencies:
